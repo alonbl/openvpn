@@ -14,7 +14,10 @@ MAINTAINERCLEANFILES = \
 
 test_scripts = t_client.sh t_lpback.sh t_cltsrv.sh
 
-TESTS_ENVIRONMENT = top_srcdir="$(top_srcdir)"
+TESTS_ENVIRONMENT = \
+	top_srcdir="$(top_srcdir)" \
+	top_builddir="$(top_builddir)" \
+	builddir="$(builddir)"
 TESTS = $(test_scripts)
 
 dist_noinst_SCRIPTS = \
