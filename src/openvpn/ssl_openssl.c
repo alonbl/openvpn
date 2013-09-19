@@ -300,6 +300,7 @@ tls_ctx_load_dh_params (struct tls_root_ctx *ctx, const char *dh_file,
 {
   DH *dh;
   BIO *bio;
+  EC_KEY *ecdh=NULL;
 
   ASSERT(NULL != ctx);
 
@@ -327,6 +328,16 @@ tls_ctx_load_dh_params (struct tls_root_ctx *ctx, const char *dh_file,
        8 * DH_size (dh));
 
   DH_free (dh);
+
+  ecdh = EC_KEY_new_by_curve_name(NID_secp224r1);
+
+  if (ecdh == NULL)
+      msg (M_SSLERR, "Unable to create curve (NID_secp224r1)");
+
+  if (!SSL_CTX_set_tmp_ecdh(ctx->ctx, ecdh))
+      msg (M_SSLERR, "SSL_CTX_set_tmp_ecdh");
+
+  EC_KEY_free(ecdh);
 }
 
 int
